@@ -3,7 +3,7 @@
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
-AuthorActions = require('../../actions/authorActions');
+var AuthorActions = require('../../actions/authorActions');
 var toastr = require('toastr');
 
 var AuthorList = React.createClass({
