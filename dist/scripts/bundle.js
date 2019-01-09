@@ -50288,6 +50288,13 @@ var AuthorActions = {
             actionType: ActionTypes.CREATE_AUTHOR,
             author: newAuthor
         });
+    },
+    updateAuthor: function(author) {
+        var updatedAuthor = AuthorApi.saveAuthor(author);
+        Dispatcher.dispatch({
+            actionType: ActionTypes.UPDATE_AUTHOR,
+            author: updatedAuthor
+        });
     }
 };
 
@@ -50600,7 +50607,11 @@ var ManageAuthorPage = React.createClass({displayName: "ManageAuthorPage",
         if (!this.authorFormIsValid()) {
             return;
         }
-        AuthorActions.createAuthor(this.state.author);
+        if (this.state.author.id) {
+            AuthorActions.updateAuthor(this.state.author);
+        } else {
+            AuthorActions.createAuthor(this.state.author);
+        }
         this.setState({dirty: false});
         toastr.success('Author saved.');
         this.transitionTo('authors');
@@ -50740,7 +50751,8 @@ var keyMirror = require('react/lib/keyMirror');
 
 module.exports = keyMirror({
     INITIALIZE: null,
-    CREATE_AUTHOR: null
+    CREATE_AUTHOR: null,
+    UPDATE_AUTHOR: null
 });
 
 },{"react/lib/keyMirror":188}],220:[function(require,module,exports){
@@ -50841,6 +50853,12 @@ Dispatcher.register(function(action) {
             break;
         case ActionTypes.CREATE_AUTHOR:
             _authors.push(action.author);
+            AuthorStore.emitChange();
+            break;
+        case ActionTypes.UPDATE_AUTHOR:
+            var existingAuthor = _.find(_authors, {id: action.author.id});
+            var existingAuthorIndex = _.find(_authors, existingAuthor);
+            _authors.splice(existingAuthorIndex, 1, action.author);
             AuthorStore.emitChange();
             break;
         default:
