@@ -14,19 +14,19 @@ var _authors = [];//private variable- not exported out of module so only way to 
 var AuthorStore = assign({}, EventEmitter.prototype, {
     // addChangeListener, removeChangeListener & emitChange give store ability to interact with React components
     addChangeListener: function(callback) {
-        this.on('change', callback);
+        this.on(CHANGE_EVENT, callback);
     },
     removeChangeListener: function(callback) {
-        this.removeListener('change', callback);
+        this.removeListener(CHANGE_EVENT, callback);
     },
     emitChange: function() {
-        this.emit('change');
+        this.emit(CHANGE_EVENT);
     },
     getAllAuthors: function() {
         return _authors;
     },
     getAuthorById: function(id) {
-        return _.find(_authors, {id : id});
+        return _.find(_authors, {id: id});
     }
 });
 
